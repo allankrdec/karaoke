@@ -1,0 +1,44 @@
+#include <cmath>
+
+double calcularFator(int semitons) {
+    return pow(2.0, semitons / 12.0);
+}
+
+QString gerarComTom(QString input, QString output, int semitons) {
+    double fator = pow(2.0, semitons / 12.0);
+    double tempo = 1.0 / fator;
+
+    QString cmd = QString(
+        "ffmpeg -y -i \"%1\" "
+        "-map 0:v -c:v copy "
+        "-map 0:a "
+        "-af \"asetrate=48000*%2,aresample=48000,atempo=%3\" "
+        "-c:a aac -b:a 192k \"%4\""
+    )
+    .arg(input)
+    .arg(fator, 0, 'f', 6)
+    .arg(tempo, 0, 'f', 6)
+    .arg(output);
+
+    return cmd;
+}
+
+
+QString cmd = gerarComTom(
+    "input.mp4",
+    "output_tom+2.mp4",
+    2
+);
+
+system(cmd.toStdString().c_str());
+
+property int semitons: 0
+Button {
+    text: "+"
+    onClicked: semitons++
+}
+
+Button {
+    text: "-"
+    onClicked: semitons--
+}
