@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Karaoke (LLDB)",
+      "type": "lldb",
+      "request": "launch",
+
+      "program": "${workspaceFolder}/build-debug/appKaraoke.app/Contents/MacOS/appKaraoke",
+      "cwd": "${workspaceFolder}",
+
+      "env": {
+        "QT_QPA_PLATFORM": "cocoa"
+      }
+    }
+  ]
+}

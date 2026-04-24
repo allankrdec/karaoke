@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Qt",
+      "type": "shell",
+      "command": "cmake --build build-release"
+    },
+    {
+      "label": "Run Qt",
+      "type": "shell",
+      "command": "./build-release/appKaraoke.app/Contents/MacOS/appKaraoke",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Build + Run Qt",
+      "type": "shell",
+      "command": "cmake --build build && ./build-release/appKaraoke.app/Contents/MacOS/appKaraoke"
+    },
+    {
+      "label": "Deploy Qt (pasta deploy)",
+      "type": "shell",
+      "command": "rm -rf deploy && mkdir deploy && cp -R build-release/appKaraoke.app deploy/ && ~/Qt/6.11.0/macos/bin/macdeployqt deploy/appKaraoke.app -qmldir=. -no-strip",
+      "problemMatcher": []
+    }
+  ]
+}
