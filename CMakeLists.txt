@@ -14,17 +14,18 @@ qt_add_executable(appKaraoke
 
 qt_add_qml_module(appKaraoke
     URI Karaoke
-    QML_FILES src/FormMain.qml
+    QML_FILES src/ui/FormMain.qml
+    QML_FILES src/ui/FormSearch.qml
+    QML_FILES src/ui/Formkaraoke.qml
+    QML_FILES src/ui/FormConfig.qml
+    QML_FILES src/ui/FormMessage.qml
+
     SOURCES src/helpers/filehelper.h
     SOURCES src/helpers/filehelper.cpp
     SOURCES src/helpers/inihelper.h
     SOURCES src/helpers/inihelper.cpp
     SOURCES src/helpers/confighelper.cpp
     SOURCES src/helpers/confighelper.h
-    QML_FILES src/FormSearch.qml
-    QML_FILES src/Formkaraoke.qml
-    QML_FILES src/FormConfig.qml
-    QML_FILES src/FormMessage.qml
 
     RESOURCES src/assets/logo.png
 )

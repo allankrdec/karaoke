@@ -51,9 +51,23 @@ Item {
     Item {
         anchors.fill: parent
 
+        Item {
+            id: areaVideo
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: buttonBar.top   // ⭐ desconta a barra
+        }
+
+        // VideoOutput {
+        //     id: videoView
+        //     anchors.fill: parent
+        //     fillMode: VideoOutput.PreserveAspectFit
+        // }
+
         VideoOutput {
             id: videoView
-            anchors.fill: parent
+            anchors.fill: areaVideo
             fillMode: VideoOutput.PreserveAspectFit
         }
 
@@ -64,13 +78,14 @@ Item {
 
             Image {
                 anchors.centerIn: parent
-                source: "assets/logo.png"
+                source: "../assets/logo.png"
                 Layout.maximumWidth: 500
                 Layout.fillWidth: true
             }
         }
 
         Rectangle {
+            id: buttonBar
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom

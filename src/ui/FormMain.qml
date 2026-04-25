@@ -6,7 +6,7 @@ ApplicationWindow {
     id: window
     visible: true
     width: 1024
-    height: 620
+    height: 620 + 60
 
     x: (Screen.width - width) / 2
     y: (Screen.height - height) / 2
