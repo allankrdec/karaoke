@@ -3,4 +3,3 @@ BreakBeforeBraces: Attach
 AllowShortIfStatementsOnASingleLine: false
 ColumnLimit: 100
 IndentWidth: 2
-
