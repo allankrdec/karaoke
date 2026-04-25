@@ -4,22 +4,20 @@ import QtQuick.Layouts
 
 FocusScope {
     id: root
-
     signal selecionouCodigo(string codigo)
 
     Component.onCompleted: {
-       Qt.callLater(function() {
-           txtBusca.forceActiveFocus()
-           txtBusca.selectAll()
-       })
-   }
+        Qt.callLater(function () {
+            txtBusca.forceActiveFocus();
+            txtBusca.selectAll();
+        });
+    }
 
     Action {
         id: acaoPause
         shortcut: "ESC"
         onTriggered: root.selecionouCodigo("")
     }
-
 
     Rectangle {
         anchors.fill: parent
@@ -42,7 +40,7 @@ FocusScope {
                 Layout.fillWidth: true
 
                 onTextChanged: {
-                    listaModel = iniHelper.buscar(text)
+                    root.listaModel = iniHelper.buscar(txtBusca.text);
                 }
             }
 
@@ -58,11 +56,15 @@ FocusScope {
             model: listaModel
 
             delegate: Rectangle {
+                required property int index
+                required property var modelData   // ⭐ isso aqui resolve
+
                 width: parent.width
                 height: 45
                 color: index % 2 === 0 ? "#ffffff" : "#eaeaea"
 
                 Text {
+
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 10
@@ -80,6 +82,5 @@ FocusScope {
             }
         }
     }
-
     property var listaModel: []
 }

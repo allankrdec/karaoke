@@ -14,17 +14,19 @@ qt_add_executable(appKaraoke
 
 qt_add_qml_module(appKaraoke
     URI Karaoke
-    QML_FILES
-        src/Main.qml
-        SOURCES src/filehelper.h
-        SOURCES src/filehelper.cpp
-        SOURCES src/musica.h
-        SOURCES src/inihelper.h
-        SOURCES src/inihelper.cpp
-        SOURCES src/confighelper.cpp
-        SOURCES src/confighelper.h
-        QML_FILES src/TelaBusca.qml
-        QML_FILES src/TelaPrincipal.qml
+    QML_FILES src/FormMain.qml
+    SOURCES src/helpers/filehelper.h
+    SOURCES src/helpers/filehelper.cpp
+    SOURCES src/helpers/inihelper.h
+    SOURCES src/helpers/inihelper.cpp
+    SOURCES src/helpers/confighelper.cpp
+    SOURCES src/helpers/confighelper.h
+    QML_FILES src/FormSearch.qml
+    QML_FILES src/Formkaraoke.qml
+    QML_FILES src/FormConfig.qml
+    QML_FILES src/FormMessage.qml
+
+    RESOURCES src/assets/logo.png
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

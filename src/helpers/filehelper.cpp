@@ -8,6 +8,7 @@ FileHelper::FileHelper(QObject* parent) : QObject(parent) {}
 
 QString FileHelper::buscarArquivo(QString codigo) {
   ConfigHelper configHelper;
+
   QString pastaBase = configHelper.getMusicPath();
   if (pastaBase == "") {
     configHelper.setMusicPath("/musicas");

@@ -6,17 +6,18 @@ import QtMultimedia
 Item {
     id: root
 
-    signal abrirBusca()
+    signal abrirBusca
+    signal abrirConfig
 
     property bool musicaCarregada: false
 
     function setCodigo(codigo) {
-        txtCodigo.text = codigo
-        buscarETocar()
+        txtCodigo.text = codigo;
+        buscarETocar();
     }
 
     function focusCodigo() {
-        txtCodigo.focus = true
+        txtCodigo.focus = true;
     }
 
     Action {
@@ -51,9 +52,22 @@ Item {
         anchors.fill: parent
 
         VideoOutput {
-            id: videoOutput
+            id: videoView
             anchors.fill: parent
             fillMode: VideoOutput.PreserveAspectFit
+        }
+
+        Rectangle {
+            color: musicaCarregada ? '#000000' : '#bdbdbd'
+            anchors.fill: parent
+            z: -1
+
+            Image {
+                anchors.centerIn: parent
+                source: "assets/logo.png"
+                Layout.maximumWidth: 500
+                Layout.fillWidth: true
+            }
         }
 
         Rectangle {
@@ -74,8 +88,8 @@ Item {
                     placeholderText: "Código"
                     focus: true
                     Component.onCompleted: {
-                        forceActiveFocus()
-                        selectAll()
+                        forceActiveFocus();
+                        selectAll();
                     }
                     visible: !musicaCarregada
 
@@ -86,6 +100,12 @@ Item {
                     text: "🔍(F1)"
                     visible: !musicaCarregada
                     onClicked: root.abrirBusca()
+                }
+
+                Button {
+                    text: "Config"
+                    visible: !musicaCarregada
+                    onClicked: root.abrirConfig()
                 }
 
                 // Button {
@@ -121,42 +141,43 @@ Item {
     MediaPlayer {
         id: player
         audioOutput: AudioOutput {}
-        videoOutput: videoOutput
+        videoOutput: videoView
     }
 
     function buscarETocar() {
-        var caminho = fileHelper.buscarArquivo(
-            txtCodigo.text
-            // "/Volumes/HDSecundario/karaoke/musicas"
-        )
+        var caminho = fileHelper.buscarArquivo(txtCodigo.text
+        // "/Volumes/HDSecundario/karaoke/musicas"
+        );
 
         if (caminho !== "") {
-            player.source = "file:///" + caminho
-            player.play()
-            musicaCarregada = true
+            player.source = "file:///" + caminho;
+            player.play();
+            musicaCarregada = true;
         } else {
-            console.log("Música não encontrada")
+            msg.titulo = "Erro";
+            msg.mensagem = "Música não encontrada";
+            msg.open();
         }
     }
 
     function play() {
         if (player.playbackState !== MediaPlayer.PlayingState) {
-            player.play()
+            player.play();
         }
     }
 
     function pause() {
         if (player.playbackState === MediaPlayer.PlayingState) {
-            player.pause()
+            player.pause();
         }
     }
 
     function stop() {
         if (player.playbackState !== MediaPlayer.StoppedState) {
-            player.stop()
-            musicaCarregada = false
-            txtCodigo.text = ""
-            txtCodigo.focus = true
+            player.stop();
+            musicaCarregada = false;
+            txtCodigo.text = "";
+            txtCodigo.focus = true;
         }
     }
 }

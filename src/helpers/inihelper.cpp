@@ -2,8 +2,7 @@
 #include "confighelper.h"
 #include <QSettings>
 
-IniHelper::IniHelper(QObject *parent) : QObject(parent)
-{
+IniHelper::IniHelper(QObject *parent) : QObject(parent) {
 }
 
 QVariantList IniHelper::buscar(QString termo)

@@ -1,31 +1,29 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "filehelper.h"
-#include "inihelper.h"
 
+#include "helpers/confighelper.h"
+#include "helpers/filehelper.h"
+#include "helpers/inihelper.h"
 
-int main(int argc, char *argv[])
-{
-    QGuiApplication app(argc, argv);
+int main(int argc, char* argv[]) {
+  QGuiApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    QObject::connect(
-        &engine,
-        &QQmlApplicationEngine::objectCreationFailed,
-        &app,
-        []() { QCoreApplication::exit(-1); },
-        Qt::QueuedConnection);
+  QQmlApplicationEngine engine;
+  QObject::connect(
+      &engine, &QQmlApplicationEngine::objectCreationFailed, &app,
+      []() { QCoreApplication::exit(-1); }, Qt::QueuedConnection);
 
-    FileHelper helper;
-    engine.rootContext()->setContextProperty("fileHelper", &helper);
+  FileHelper helper;
+  engine.rootContext()->setContextProperty("fileHelper", &helper);
 
-    engine.loadFromModule("Karaoke", "Main");
+  engine.loadFromModule("Karaoke", "FormMain");
 
-    IniHelper iniHelper;
-    engine.rootContext()->setContextProperty("iniHelper", &iniHelper);
+  IniHelper iniHelper;
+  engine.rootContext()->setContextProperty("iniHelper", &iniHelper);
 
-    return QCoreApplication::exec();
+  ConfigHelper configHelper;
+  engine.rootContext()->setContextProperty("configHelper", &configHelper);
+
+  return QCoreApplication::exec();
 }
-
-

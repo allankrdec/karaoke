@@ -1,6 +1,12 @@
 {
   "cmake.configureSettings": {
-    "CMAKE_PREFIX_PATH": "/Users/allankardec/Qt/6.11.0/macos"
+    "CMAKE_PREFIX_PATH": "${env:HOME}/Qt/6.11.0/macos"
   },
+  "cmake.buildDirectory": "${workspaceFolder}/build-debug",
+  "editor.formatOnSave": true,
+  "qt-qml.qmlls.additionalImportPaths": [
+    "${env:HOME}/Qt/6.11.0/macos/qml"
+  ]
+
 
 }
