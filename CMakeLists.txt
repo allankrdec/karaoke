@@ -9,20 +9,22 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 qt_standard_project_setup(REQUIRES 6.10)
 
 qt_add_executable(appKaraoke
-    main.cpp
+    src/main.cpp
 )
 
 qt_add_qml_module(appKaraoke
     URI Karaoke
     QML_FILES
-        Main.qml
-        SOURCES filehelper.h
-        SOURCES filehelper.cpp
-        SOURCES musica.h
-        SOURCES inihelper.h
-        SOURCES inihelper.cpp
-        QML_FILES TelaBusca.qml
-        QML_FILES TelaPrincipal.qml
+        src/Main.qml
+        SOURCES src/filehelper.h
+        SOURCES src/filehelper.cpp
+        SOURCES src/musica.h
+        SOURCES src/inihelper.h
+        SOURCES src/inihelper.cpp
+        SOURCES src/confighelper.cpp
+        SOURCES src/confighelper.h
+        QML_FILES src/TelaBusca.qml
+        QML_FILES src/TelaPrincipal.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

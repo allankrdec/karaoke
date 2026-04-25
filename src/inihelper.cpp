@@ -1,4 +1,5 @@
 #include "inihelper.h"
+#include "confighelper.h"
 #include <QSettings>
 
 IniHelper::IniHelper(QObject *parent) : QObject(parent)
@@ -8,8 +9,11 @@ IniHelper::IniHelper(QObject *parent) : QObject(parent)
 QVariantList IniHelper::buscar(QString termo)
 {
     QVariantList lista;
+    ConfigHelper configHelper;
 
-    QSettings ini("/Volumes/HDSecundario/karaoke/musicas.ini", QSettings::IniFormat);
+    QString pastaBase = configHelper.getMusicPath();
+    QSettings ini(pastaBase + "/musicas.ini", QSettings::IniFormat);
+
     // ini.setIniCodec("UTF-8");
 
     QStringList grupos = ini.childGroups();

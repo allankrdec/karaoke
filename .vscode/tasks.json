@@ -18,12 +18,19 @@
     {
       "label": "Build + Run Qt",
       "type": "shell",
-      "command": "cmake --build build && ./build-release/appKaraoke.app/Contents/MacOS/appKaraoke"
+      "command": "cmake --build build-release && ./build-release/appKaraoke.app/Contents/MacOS/appKaraoke"
     },
     {
       "label": "Deploy Qt (pasta deploy)",
       "type": "shell",
-      "command": "rm -rf deploy && mkdir deploy && cp -R build-release/appKaraoke.app deploy/ && ~/Qt/6.11.0/macos/bin/macdeployqt deploy/appKaraoke.app -qmldir=. -no-strip",
+      "command": "cmake --build build-release && rm -rf deploy && mkdir deploy && cp -R build-release/appKaraoke.app deploy/ && ~/Qt/6.11.0/macos/bin/macdeployqt deploy/appKaraoke.app -qmldir=. -no-strip",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Debug",
+      "type": "shell",
+      "command": "cmake --build build-debug",
+      "group": "build",
       "problemMatcher": []
     }
   ]

@@ -2,5 +2,5 @@
   "cmake.configureSettings": {
     "CMAKE_PREFIX_PATH": "/Users/allankardec/Qt/6.11.0/macos"
   },
-  // "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+
 }

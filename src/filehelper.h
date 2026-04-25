@@ -9,7 +9,7 @@ class FileHelper : public QObject
 public:
     explicit FileHelper(QObject *parent = nullptr);
 
-    Q_INVOKABLE QString buscarArquivo(QString codigo, QString pastaBase);
+    Q_INVOKABLE QString buscarArquivo(QString codigo);
 };
 
 #endif

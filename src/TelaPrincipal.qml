@@ -126,8 +126,8 @@ Item {
 
     function buscarETocar() {
         var caminho = fileHelper.buscarArquivo(
-            txtCodigo.text,
-            "/Volumes/HDSecundario/karaoke/musicas"
+            txtCodigo.text
+            // "/Volumes/HDSecundario/karaoke/musicas"
         )
 
         if (caminho !== "") {
