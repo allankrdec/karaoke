@@ -2,23 +2,19 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtMultimedia
+import QtQuick.Dialogs
 
 Item {
     id: root
 
     signal abrirBusca
     signal abrirConfig
+    property var playlist: []
 
+    property int playlistIndex: -1
+    property int playlistCount: 0
+    property bool tocandoPlaylist: false
     property bool musicaCarregada: false
-
-    function setCodigo(codigo) {
-        txtCodigo.text = codigo;
-        buscarETocar();
-    }
-
-    function focusCodigo() {
-        txtCodigo.focus = true;
-    }
 
     Action {
         id: acaoBuscar
@@ -56,7 +52,7 @@ Item {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.bottom: buttonBar.top   // ⭐ desconta a barra
+            anchors.bottom: buttonBar.top
         }
 
         VideoOutput {
@@ -88,60 +84,104 @@ Item {
 
             RowLayout {
                 anchors.centerIn: parent
-                spacing: 10
+                spacing: 30
 
-                TextField {
-                    id: txtCodigo
-                    width: 120
+                RowLayout {
+                    spacing: 1
 
-                    placeholderText: "Código"
-                    focus: true
-                    Component.onCompleted: {
-                        forceActiveFocus();
-                        selectAll();
+                    TextField {
+                        id: txtCodigo
+                        width: 120
+
+                        placeholderText: "Código"
+                        focus: true
+                        Component.onCompleted: {
+                            forceActiveFocus();
+                            selectAll();
+                        }
+                        visible: !musicaCarregada
+
+                        onAccepted: buscarETocar()
                     }
-                    visible: !musicaCarregada
 
-                    onAccepted: buscarETocar()
+                    Button {
+                        text: "🔍(F1)"
+                        visible: !musicaCarregada
+                        onClicked: root.abrirBusca()
+                    }
+
+                    // Button {
+                    //     text: "Buscar"
+                    //     visible: !musicaCarregada
+                    //     onClicked: buscarETocar()
+                    // }
+
+                    Button {
+                        text: "Play (F5)"
+                        enabled: player.playbackState !== MediaPlayer.PlayingState
+                        visible: musicaCarregada
+                        onClicked: play()
+                    }
+
+                    Button {
+                        text: "Pause (F6)"
+                        enabled: player.playbackState === MediaPlayer.PlayingState
+                        visible: musicaCarregada
+                        onClicked: pause()
+                    }
+
+                    Button {
+                        text: "Stop (F7)"
+                        enabled: player.playbackState !== MediaPlayer.StoppedState
+                        visible: musicaCarregada
+                        onClicked: stop()
+                    }
                 }
 
-                Button {
-                    text: "🔍(F1)"
-                    visible: !musicaCarregada
-                    onClicked: root.abrirBusca()
+                RowLayout {
+                    spacing: 1
+                    // Layout.alignment: Qt.AlignVCenter
+
+                    Button {
+                        text: "🔍 Playlist"
+                        // onClicked: carregarPlaylist()
+                        onClicked: fileDialog.open()
+                    }
+
+                    Button {
+                        enabled: root.tocandoPlaylist && root.playlistIndex > 0
+                        text: " < "
+                        onClicked: {
+                            root.playPrior();
+                        }
+                    }
+                    Button {
+                        enabled: root.tocandoPlaylist && root.playlistIndex < root.playlistCount - 1
+                        text: " > "
+                        onClicked: {
+                            root.playNext();
+                        }
+                    }
+
+                    Label {
+                        visible: root.playlistCount > 0
+                        text: root.playlistIndex + "/" + root.playlistCount
+                    }
+
+                    Button {
+                        text: "Parar Playlist"
+                        onClicked: {
+                            tocandoPlaylist = false;
+                            root.stop();
+                            txtCodigo.text = "";
+                        }
+                    }
                 }
 
                 Button {
                     text: "Config"
                     visible: !musicaCarregada
                     onClicked: root.abrirConfig()
-                }
-
-                // Button {
-                //     text: "Buscar"
-                //     visible: !musicaCarregada
-                //     onClicked: buscarETocar()
-                // }
-
-                Button {
-                    text: "Play (F5)"
-                    enabled: player.playbackState !== MediaPlayer.PlayingState
-                    visible: musicaCarregada
-                    onClicked: play()
-                }
-
-                Button {
-                    text: "Pause (F6)"
-                    enabled: player.playbackState === MediaPlayer.PlayingState
-                    visible: musicaCarregada
-                    onClicked: pause()
-                }
-
-                Button {
-                    text: "Stop (F7)"
-                    enabled: player.playbackState !== MediaPlayer.StoppedState
-                    visible: musicaCarregada
-                    onClicked: stop()
                 }
             }
         }
@@ -152,23 +192,85 @@ Item {
         audioOutput: AudioOutput {}
         onPositionChanged: {
             if (duration > 0 && position >= duration) {
-                player.stop();
-                musicaCarregada = false;
-                // txtCodigo.text = "";
-                txtCodigo.focus = true;
+                if (tocandoPlaylist) {
+                    tocarProxima();
+                } else {
+                    player.stop();
+                    musicaCarregada = false;
+                    txtCodigo.focus = true;
+                }
             }
         }
         videoOutput: videoView
     }
 
-    function buscarETocar() {
-        var caminho = fileHelper.buscarArquivo(txtCodigo.text
-        // "/Volumes/HDSecundario/karaoke/musicas"
-        );
+    FileDialog {
+        id: fileDialog
+        title: "Selecionar playlist"
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Arquivos de texto (*.txt)"]
+
+        onAccepted: {
+            root.carregarPlaylist(selectedFile.toString().replace("file://", ""));
+        }
+    }
+
+    //functions
+
+    function setCodigo(codigo) {
+        txtCodigo.text = codigo;
+        buscarETocar();
+    }
+
+    function carregarPlaylist(filePath) {
+        var lista = fileHelper.lerPlaylist(filePath);
+        playlist = lista;
+        playlistIndex = -1;
+        tocandoPlaylist = true;
+        playlistCount = lista.length;
+
+        playNext();
+    }
+
+    function playNext() {
+        if (playlistIndex >= playlist.length - 1) {
+            // tocandoPlaylist = false;
+            return;
+        }
+
+        playlistIndex++;
+        var codigo = playlist[playlistIndex];
+
+        txtCodigo.text = codigo;
+        buscarETocar(true);
+    }
+
+    function playPrior() {
+        if (playlistIndex <= 0) {
+            // tocandoPlaylist = false;
+            return;
+        }
+        playlistIndex--;
+
+        var codigo = playlist[playlistIndex];
+
+        txtCodigo.text = codigo;
+        buscarETocar(true);
+    }
+
+    function focusCodigo() {
+        txtCodigo.focus = true;
+    }
+
+    function buscarETocar(tocar = false) {
+        var caminho = fileHelper.buscarArquivo(txtCodigo.text);
 
         if (caminho !== "") {
             player.source = "file:///" + caminho;
-            player.pause();
+            if (tocar)
+                player.play();
+            else
+                player.pause();
             musicaCarregada = true;
         } else {
             msg.titulo = "Erro";

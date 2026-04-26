@@ -22,3 +22,19 @@ QString FileHelper::buscarArquivo(QString codigo) {
 
   return "";
 }
+
+QStringList FileHelper::lerPlaylist(const QString& caminho) {
+  QFile file(caminho);
+  QStringList lista;
+
+  if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+      QString linha = in.readLine().trimmed();
+      if (!linha.isEmpty())
+        lista.append(linha);
+    }
+  }
+
+  return lista;
+}

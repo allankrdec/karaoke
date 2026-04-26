@@ -3,13 +3,13 @@
 
 #include <QObject>
 
-class FileHelper : public QObject
-{
-    Q_OBJECT
-public:
-    explicit FileHelper(QObject *parent = nullptr);
+class FileHelper : public QObject {
+  Q_OBJECT
+ public:
+  explicit FileHelper(QObject* parent = nullptr);
 
-    Q_INVOKABLE QString buscarArquivo(QString codigo);
+  Q_INVOKABLE QString buscarArquivo(QString codigo);
+  Q_INVOKABLE QStringList lerPlaylist(const QString& caminho);
 };
 
 #endif
