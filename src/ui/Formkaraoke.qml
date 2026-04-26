@@ -59,12 +59,6 @@ Item {
             anchors.bottom: buttonBar.top   // ⭐ desconta a barra
         }
 
-        // VideoOutput {
-        //     id: videoView
-        //     anchors.fill: parent
-        //     fillMode: VideoOutput.PreserveAspectFit
-        // }
-
         VideoOutput {
             id: videoView
             anchors.fill: areaVideo
@@ -156,6 +150,14 @@ Item {
     MediaPlayer {
         id: player
         audioOutput: AudioOutput {}
+        onPositionChanged: {
+            if (duration > 0 && position >= duration) {
+                player.stop();
+                musicaCarregada = false;
+                // txtCodigo.text = "";
+                txtCodigo.focus = true;
+            }
+        }
         videoOutput: videoView
     }
 
@@ -166,7 +168,7 @@ Item {
 
         if (caminho !== "") {
             player.source = "file:///" + caminho;
-            player.play();
+            player.pause();
             musicaCarregada = true;
         } else {
             msg.titulo = "Erro";
@@ -191,7 +193,7 @@ Item {
         if (player.playbackState !== MediaPlayer.StoppedState) {
             player.stop();
             musicaCarregada = false;
-            txtCodigo.text = "";
+            // txtCodigo.text = "";
             txtCodigo.focus = true;
         }
     }
