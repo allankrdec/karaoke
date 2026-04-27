@@ -61,6 +61,17 @@ Item {
             fillMode: VideoOutput.PreserveAspectFit
         }
 
+        MouseArea {
+            anchors.fill: videoView   // ⭐ cobre o vídeo
+            onClicked: {
+                if (player.playbackState === MediaPlayer.PlayingState) {
+                    player.pause();
+                } else {
+                    player.play();
+                }
+            }
+        }
+
         Rectangle {
             color: musicaCarregada ? '#000000' : '#bdbdbd'
             anchors.fill: parent
@@ -84,10 +95,10 @@ Item {
 
             RowLayout {
                 anchors.centerIn: parent
-                spacing: 30
+                spacing: 35
 
                 RowLayout {
-                    spacing: 1
+                    spacing: 5
 
                     TextField {
                         id: txtCodigo
@@ -139,7 +150,7 @@ Item {
                 }
 
                 RowLayout {
-                    spacing: 1
+                    spacing: 5
                     // Layout.alignment: Qt.AlignVCenter
 
                     Button {
