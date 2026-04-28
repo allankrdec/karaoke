@@ -10,6 +10,7 @@ qt_standard_project_setup(REQUIRES 6.10)
 
 qt_add_executable(appKaraoke
     src/main.cpp
+    src/assets/icon.icns
 )
 
 qt_add_qml_module(appKaraoke
@@ -49,4 +50,16 @@ install(TARGETS appKaraoke
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+set(MACOSX_BUNDLE_ICON_FILE icon.icns)
+
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/assets/icon.icns
+    PROPERTIES MACOSX_PACKAGE_LOCATION "Resources"
+)
+
+set_target_properties(appKaraoke PROPERTIES
+    MACOSX_BUNDLE TRUE
+    MACOSX_BUNDLE_ICON_FILE icon.icns
 )

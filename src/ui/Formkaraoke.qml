@@ -154,7 +154,7 @@ Item {
                     // Layout.alignment: Qt.AlignVCenter
 
                     Button {
-                        text: "🔍 Playlist"
+                        text: "🎵 Playlist"
                         // onClicked: carregarPlaylist()
                         onClicked: fileDialog.open()
                     }
@@ -189,10 +189,15 @@ Item {
                     }
                 }
 
-                Button {
-                    text: "Config"
-                    visible: !musicaCarregada
-                    onClicked: root.abrirConfig()
+                RowLayout {
+                    spacing: 50
+                    // anchors.left: parent.left
+
+                    Button {
+                        text: "⚙️"
+                        visible: !musicaCarregada
+                        onClicked: root.abrirConfig()
+                    }
                 }
             }
         }
